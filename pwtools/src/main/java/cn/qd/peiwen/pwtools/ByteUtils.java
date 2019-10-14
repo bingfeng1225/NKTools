@@ -1,6 +1,9 @@
 package cn.qd.peiwen.pwtools;
 
 public class ByteUtils {
+    private ByteUtils() {
+        throw new UnsupportedOperationException("u can't instantiate me...");
+    }
 
     public static byte computeXORCode(byte[] data, int offset, int len) {
         byte temp = data[offset];
@@ -10,11 +13,11 @@ public class ByteUtils {
         return temp;
     }
 
-    public static String toHexString(byte[] data){
+    public static String toHexString(byte[] data) {
         if (data == null) {
             return null;
         }
-        return toHexString(data,0,data.length);
+        return toHexString(data, 0, data.length);
     }
 
     public static String toHexString(byte[] data, int offset, int len) {

@@ -25,6 +25,11 @@ public class FileUtils {
     public static final long MB = 1024 * 1024;//定义MB的计算常量
     public static final long KB = 1024;//定义KB的计算常量
 
+    private FileUtils() {
+        throw new UnsupportedOperationException("u can't instantiate me...");
+    }
+
+
     public static boolean isFileExist(String filePath) {
         if (TextUtils.isEmpty(filePath)) {
             return false;
