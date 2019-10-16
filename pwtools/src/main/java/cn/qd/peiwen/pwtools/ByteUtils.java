@@ -41,7 +41,7 @@ public class ByteUtils {
     }
 
     public static int bytes2Int(byte[] bytes, ByteOrder order) {
-        return bytes2Int(bytes, 0, ByteOrder.BIG_ENDIAN);
+        return bytes2Int(bytes, 0, order);
     }
 
     public static int bytes2Int(byte[] bytes, int offset, ByteOrder order) {
@@ -82,7 +82,7 @@ public class ByteUtils {
     }
 
     public static short bytes2Short(byte[] bytes, ByteOrder order) {
-        return bytes2Short(bytes, 0, ByteOrder.BIG_ENDIAN);
+        return bytes2Short(bytes, 0, order);
     }
 
     public static short bytes2Short(byte[] bytes, int offset, ByteOrder order) {
@@ -134,7 +134,7 @@ public class ByteUtils {
     }
 
     public static long bytes2Long(byte[] bytes, ByteOrder order) {
-        return bytes2Long(bytes, 0, ByteOrder.BIG_ENDIAN);
+        return bytes2Long(bytes, 0, order);
     }
 
     public static long bytes2Long(byte[] bytes, int offset, ByteOrder order) {
@@ -169,7 +169,7 @@ public class ByteUtils {
     }
 
     public static float bytes2Flaot(byte[] bytes, ByteOrder order) {
-        return bytes2Flaot(bytes, 0, ByteOrder.BIG_ENDIAN);
+        return bytes2Flaot(bytes, 0, order);
     }
 
     public static float bytes2Flaot(byte[] bytes, int offset, ByteOrder order) {
@@ -194,7 +194,7 @@ public class ByteUtils {
     }
 
     public static double bytes2Double(byte[] bytes, ByteOrder order) {
-        return bytes2Double(bytes, 0, ByteOrder.BIG_ENDIAN);
+        return bytes2Double(bytes, 0, order);
     }
 
     public static double bytes2Double(byte[] bytes, int offset, ByteOrder order) {

@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         Log.e("测试","" + value);
         buf = ByteUtils.long2BytesLE(value);
         Log.e("测试",ByteUtils.bytes2HexString(buf,true,", "));
-        value = ByteUtils.bytes2Long(buf,0, ByteOrder.LITTLE_ENDIAN);
+        value = ByteUtils.bytes2Long(buf, ByteOrder.LITTLE_ENDIAN);
         Log.e("测试","" + value);
 
     }
