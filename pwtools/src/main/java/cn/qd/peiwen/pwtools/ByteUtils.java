@@ -33,15 +33,29 @@ public class ByteUtils {
     }
 
     public static int bytes2Int(byte[] bytes) {
-        return bytes2Int(bytes, bytes.length);
+        return bytes2Int(bytes, 0);
     }
 
     public static int bytes2Int(byte[] bytes, int offset) {
-        return bytes2Int(bytes, bytes.length, ByteOrder.BIG_ENDIAN);
+        return bytes2Int(bytes, offset, ByteOrder.BIG_ENDIAN);
+    }
+
+    public static int bytes2Int(byte[] bytes, ByteOrder order) {
+        return bytes2Int(bytes, 0, ByteOrder.BIG_ENDIAN);
     }
 
     public static int bytes2Int(byte[] bytes, int offset, ByteOrder order) {
-        return 0;
+        if (offset < 0 || offset > bytes.length - 1) {
+            throw new IllegalArgumentException("The offset index out of bounds");
+        }
+        if (bytes.length - offset < 4) {
+            throw new IllegalArgumentException("The bytes (legth - offset) < int bytes(4)");
+        }
+        ByteBuffer buffer = ByteBuffer.wrap(bytes, offset, 4);
+        if (order == ByteOrder.LITTLE_ENDIAN) {
+            buffer.order(ByteOrder.LITTLE_ENDIAN);
+        }
+        return buffer.getInt();
     }
 
 
@@ -60,15 +74,29 @@ public class ByteUtils {
     }
 
     public static short bytes2Short(byte[] bytes) {
-        return bytes2Short(bytes, bytes.length);
+        return bytes2Short(bytes, 0);
     }
 
     public static short bytes2Short(byte[] bytes, int offset) {
-        return bytes2Short(bytes, bytes.length, ByteOrder.BIG_ENDIAN);
+        return bytes2Short(bytes, offset, ByteOrder.BIG_ENDIAN);
+    }
+
+    public static short bytes2Short(byte[] bytes, ByteOrder order) {
+        return bytes2Short(bytes, 0, ByteOrder.BIG_ENDIAN);
     }
 
     public static short bytes2Short(byte[] bytes, int offset, ByteOrder order) {
-        return 0;
+        if (offset < 0 || offset > bytes.length - 1) {
+            throw new IllegalArgumentException("The offset index out of bounds");
+        }
+        if (bytes.length - offset < 2) {
+            throw new IllegalArgumentException("The bytes (legth - offset) < short bytes(2)");
+        }
+        ByteBuffer buffer = ByteBuffer.wrap(bytes, offset, 2);
+        if (order == ByteOrder.LITTLE_ENDIAN) {
+            buffer.order(ByteOrder.LITTLE_ENDIAN);
+        }
+        return buffer.getShort();
     }
 
     public static byte[] long2Bytes(long value) {
@@ -98,15 +126,29 @@ public class ByteUtils {
     }
 
     public static long bytes2Long(byte[] bytes) {
-        return bytes2Long(bytes, bytes.length);
+        return bytes2Long(bytes, 0);
     }
 
     public static long bytes2Long(byte[] bytes, int offset) {
-        return bytes2Long(bytes, bytes.length, ByteOrder.BIG_ENDIAN);
+        return bytes2Long(bytes, offset, ByteOrder.BIG_ENDIAN);
+    }
+
+    public static long bytes2Long(byte[] bytes, ByteOrder order) {
+        return bytes2Long(bytes, 0, ByteOrder.BIG_ENDIAN);
     }
 
     public static long bytes2Long(byte[] bytes, int offset, ByteOrder order) {
-        return 0;
+        if (offset < 0 || offset > bytes.length - 1) {
+            throw new IllegalArgumentException("The offset index out of bounds");
+        }
+        if (bytes.length - offset < 8) {
+            throw new IllegalArgumentException("The bytes (legth - offset) < long bytes(8)");
+        }
+        ByteBuffer buffer = ByteBuffer.wrap(bytes, offset, 8);
+        if (order == ByteOrder.LITTLE_ENDIAN) {
+            buffer.order(ByteOrder.LITTLE_ENDIAN);
+        }
+        return buffer.getLong();
     }
 
 
@@ -119,15 +161,20 @@ public class ByteUtils {
     }
 
     public static float bytes2Flaot(byte[] bytes) {
-        return bytes2Flaot(bytes, bytes.length);
+        return bytes2Flaot(bytes, 0);
     }
 
     public static float bytes2Flaot(byte[] bytes, int offset) {
-        return bytes2Flaot(bytes, bytes.length, ByteOrder.BIG_ENDIAN);
+        return bytes2Flaot(bytes, offset, ByteOrder.BIG_ENDIAN);
+    }
+
+    public static float bytes2Flaot(byte[] bytes, ByteOrder order) {
+        return bytes2Flaot(bytes, 0, ByteOrder.BIG_ENDIAN);
     }
 
     public static float bytes2Flaot(byte[] bytes, int offset, ByteOrder order) {
-        return 0;
+        int temp = bytes2Int(bytes, offset, order);
+        return Float.intBitsToFloat(temp);
     }
 
     public static byte[] double2Bytes(double value) {
@@ -139,15 +186,20 @@ public class ByteUtils {
     }
 
     public static double bytes2Double(byte[] bytes) {
-        return bytes2Double(bytes, bytes.length);
+        return bytes2Double(bytes, 0);
     }
 
     public static double bytes2Double(byte[] bytes, int offset) {
-        return bytes2Double(bytes, bytes.length, ByteOrder.BIG_ENDIAN);
+        return bytes2Double(bytes, offset, ByteOrder.BIG_ENDIAN);
+    }
+
+    public static double bytes2Double(byte[] bytes, ByteOrder order) {
+        return bytes2Double(bytes, 0, ByteOrder.BIG_ENDIAN);
     }
 
     public static double bytes2Double(byte[] bytes, int offset, ByteOrder order) {
-        return 0;
+        long temp = bytes2Long(bytes, offset, order);
+        return Double.longBitsToDouble(temp);
     }
 
     public static String bytes2HexString(byte[] data) {

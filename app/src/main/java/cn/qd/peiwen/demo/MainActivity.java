@@ -7,6 +7,9 @@ import cn.qd.peiwen.pwtools.ByteUtils;
 import android.os.Bundle;
 import android.util.Log;
 
+import java.nio.ByteOrder;
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -20,5 +23,16 @@ public class MainActivity extends AppCompatActivity {
 
         byte[] buf = new byte[]{xor, xorInver, data[data.length - 2]};
         Log.e("测试",ByteUtils.bytes2HexString(buf,true,", "));
+
+        long value = 774926202;
+        buf = ByteUtils.long2Bytes(value);
+        Log.e("测试",ByteUtils.bytes2HexString(buf,true,", "));
+        value = ByteUtils.bytes2Long(buf);
+        Log.e("测试","" + value);
+        buf = ByteUtils.long2BytesLE(value);
+        Log.e("测试",ByteUtils.bytes2HexString(buf,true,", "));
+        value = ByteUtils.bytes2Long(buf,0, ByteOrder.LITTLE_ENDIAN);
+        Log.e("测试","" + value);
+
     }
 }
