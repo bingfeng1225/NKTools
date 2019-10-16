@@ -7,6 +7,8 @@ import android.util.SparseBooleanArray;
 import android.util.SparseIntArray;
 import android.util.SparseLongArray;
 
+import java.lang.ref.Reference;
+import java.lang.ref.WeakReference;
 import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Map;
@@ -19,6 +21,7 @@ public class EmptyUtils {
     private EmptyUtils() {
         throw new UnsupportedOperationException("u can't instantiate me...");
     }
+
     /**
      * 判断对象是否为空
      *
@@ -48,6 +51,9 @@ public class EmptyUtils {
             return true;
         }
         if (obj instanceof SparseIntArray && ((SparseIntArray) obj).size() == 0) {
+            return true;
+        }
+        if (obj instanceof WeakReference && isEmpty(((Reference) obj).get())) {
             return true;
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
