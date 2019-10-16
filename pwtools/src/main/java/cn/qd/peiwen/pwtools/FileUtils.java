@@ -29,7 +29,6 @@ public class FileUtils {
         throw new UnsupportedOperationException("u can't instantiate me...");
     }
 
-
     public static boolean isFileExist(String filePath) {
         if (TextUtils.isEmpty(filePath)) {
             return false;
