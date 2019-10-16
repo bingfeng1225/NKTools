@@ -19,7 +19,6 @@ public class MainActivity extends AppCompatActivity {
         byte xorInver = ByteUtils.computeXORInverse(data, 0, data.length - 2);
 
         byte[] buf = new byte[]{xor, xorInver, data[data.length - 2]};
-        Log.e("测试",ByteUtils.toHexString(buf,true,", "));
-
+        Log.e("测试",ByteUtils.bytes2HexString(buf,true,", "));
     }
 }
