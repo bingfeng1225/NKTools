@@ -34,5 +34,8 @@ public class MainActivity extends AppCompatActivity {
         value = ByteUtils.bytes2Long(buf, ByteOrder.LITTLE_ENDIAN);
         Log.e("测试","" + value);
 
+        buf = new byte[] {0x01, 0x10, 0x40, 0x1F, 0x32, 0x00, (byte)0xF1, 0x6F};
+        byte[] crc = ByteUtils.computeCRCCode(buf,0,6);
+        Log.e("测试","crc = " + ByteUtils.bytes2HexString(crc));
     }
 }

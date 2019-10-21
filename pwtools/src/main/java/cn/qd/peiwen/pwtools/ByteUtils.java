@@ -1,5 +1,7 @@
 package cn.qd.peiwen.pwtools;
 
+import android.util.Log;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
@@ -212,7 +214,7 @@ public class ByteUtils {
 
     public static String bytes2HexString(byte[] data, boolean hexFlag, String separator) {
         if (EmptyUtils.isEmpty(data)) {
-            return null;
+            throw new IllegalArgumentException("The data can not be blank");
         }
         return bytes2HexString(data, 0, data.length, hexFlag, separator);
     }
@@ -227,13 +229,13 @@ public class ByteUtils {
 
     public static String bytes2HexString(byte[] data, int offset, int len, boolean hexFlag, String separator) {
         if (EmptyUtils.isEmpty(data)) {
-            return null;
+            throw new IllegalArgumentException("The data can not be blank");
         }
         if (offset < 0 || offset > data.length - 1) {
-            return null;
+            throw new IllegalArgumentException("The offset index out of bounds");
         }
         if (len < 0 || offset + len > data.length) {
-            return null;
+            throw new IllegalArgumentException("The len can not be < 0 or (offset + len) index out of bounds");
         }
         String format = "%02X";
         if (hexFlag) {
@@ -252,7 +254,23 @@ public class ByteUtils {
         return buffer.toString();
     }
 
+    public static byte computeXORCode(byte[] data) {
+        if (EmptyUtils.isEmpty(data)) {
+            throw new IllegalArgumentException("The data can not be blank");
+        }
+        return computeXORCode(data, 0, data.length);
+    }
+
     public static byte computeXORCode(byte[] data, int offset, int len) {
+        if (EmptyUtils.isEmpty(data)) {
+            throw new IllegalArgumentException("The data can not be blank");
+        }
+        if (offset < 0 || offset > data.length - 1) {
+            throw new IllegalArgumentException("The offset index out of bounds");
+        }
+        if (len < 0 || offset + len > data.length) {
+            throw new IllegalArgumentException("The len can not be < 0 or (offset + len) index out of bounds");
+        }
         byte temp = data[offset];
         for (int i = offset + 1; i < offset + len; i++) {
             temp ^= data[i];
@@ -260,8 +278,68 @@ public class ByteUtils {
         return temp;
     }
 
+    public static byte computeXORInverse(byte[] data) {
+        if (EmptyUtils.isEmpty(data)) {
+            throw new IllegalArgumentException("The data can not be blank");
+        }
+        return computeXORInverse(data, 0, data.length);
+    }
+
     public static byte computeXORInverse(byte[] data, int offset, int len) {
         byte xor = computeXORCode(data, offset, len);
         return (byte) (~xor);
+    }
+
+
+    public static byte[] computeCRCCode(byte[] data) {
+        if (EmptyUtils.isEmpty(data)) {
+            throw new IllegalArgumentException("The data can not be blank");
+        }
+        return computeCRCCode(data, 0, data.length);
+    }
+
+    public static byte[] computeCRCCode(byte[] data, int offset, int len) {
+        if (EmptyUtils.isEmpty(data)) {
+            throw new IllegalArgumentException("The data can not be blank");
+        }
+        if (offset < 0 || offset > data.length - 1) {
+            throw new IllegalArgumentException("The offset index out of bounds");
+        }
+        if (len < 0 || offset + len > data.length) {
+            throw new IllegalArgumentException("The len can not be < 0 or (offset + len) index out of bounds");
+        }
+        int crc = 0xFFFF;
+        for (int pos = offset; pos < offset + len; pos++) {
+            if (data[pos] < 0) {
+                crc ^= (int) data[pos] + 256; // XOR byte into least sig. byte of
+                // crc
+            } else {
+                crc ^= (int) data[pos]; // XOR byte into least sig. byte of crc
+            }
+            for (int i = 8; i != 0; i--) { // Loop over each bit
+                if ((crc & 0x0001) != 0) { // If the LSB is set
+                    crc >>= 1; // Shift right and XOR 0xA001
+                    crc ^= 0xA001;
+                } else {
+                    // Else LSB is not set
+                    crc >>= 1; // Just shift right
+                }
+            }
+        }
+        String c = Integer.toHexString(crc).toUpperCase();
+        if (c.length() == 4) {
+            c = c.substring(2, 4) + c.substring(0, 2);
+        } else if (c.length() == 3) {
+            c = "0" + c;
+            c = c.substring(2, 4) + c.substring(0, 2);
+        } else if (c.length() == 2) {
+            c = "0" + c.substring(1, 2) + "0" + c.substring(0, 1);
+        }
+
+        Log.e("测试:","CRC String= " + c);
+        return new byte[]{
+                (byte) (Integer.parseInt(c.substring(0, 2), 16)),
+                (byte) (Integer.parseInt(c.substring(2, 4), 16))
+        };
     }
 }
