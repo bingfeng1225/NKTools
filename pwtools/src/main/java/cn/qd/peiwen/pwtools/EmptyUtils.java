@@ -7,7 +7,6 @@ import android.util.SparseBooleanArray;
 import android.util.SparseIntArray;
 import android.util.SparseLongArray;
 
-import java.lang.ref.Reference;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Array;
 import java.util.Collection;
@@ -53,7 +52,7 @@ public class EmptyUtils {
         if (obj instanceof SparseIntArray && ((SparseIntArray) obj).size() == 0) {
             return true;
         }
-        if (obj instanceof WeakReference && isEmpty(((Reference) obj).get())) {
+        if (obj instanceof WeakReference && isEmpty(((WeakReference) obj).get())) {
             return true;
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {

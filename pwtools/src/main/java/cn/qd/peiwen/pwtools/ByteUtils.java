@@ -1,7 +1,5 @@
 package cn.qd.peiwen.pwtools;
 
-import android.util.Log;
-
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
@@ -336,7 +334,6 @@ public class ByteUtils {
             c = "0" + c.substring(1, 2) + "0" + c.substring(0, 1);
         }
 
-        Log.e("测试:","CRC String= " + c);
         return new byte[]{
                 (byte) (Integer.parseInt(c.substring(0, 2), 16)),
                 (byte) (Integer.parseInt(c.substring(2, 4), 16))
