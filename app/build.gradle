@@ -11,8 +11,18 @@ android {
         versionName "1.0"
     }
     buildTypes {
+        debug {
+            minifyEnabled false
+            buildConfigField "String", "PW_LOG_LEVEL", "\"ALL\""
+            buildConfigField "boolean", "PW_LOG_FILE", "false"
+            buildConfigField "boolean", "PW_LOG_LOGCAT", "true"
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
         release {
             minifyEnabled false
+            buildConfigField "String", "PW_LOG_LEVEL", "\"ALL\""
+            buildConfigField "boolean", "PW_LOG_FILE", "true"
+            buildConfigField "boolean", "PW_LOG_LOGCAT", "false"
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -20,6 +30,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation project(path: ':pwtools')
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation group: 'log4j', name: 'log4j', version: '1.2.17'
 }
