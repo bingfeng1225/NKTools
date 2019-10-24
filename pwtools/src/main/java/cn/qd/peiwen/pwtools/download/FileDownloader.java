@@ -4,6 +4,7 @@ package cn.qd.peiwen.pwtools.download;
 import java.io.IOException;
 import java.io.InputStream;
 
+import cn.qd.peiwen.pwtools.logger.PWLogger;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -85,7 +86,7 @@ public class FileDownloader implements Callback {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            PWLogger.d(e);
             if (null != this.listener) {
                 this.listener.onFailured(this, this.downloaderObject, call.isCanceled());
             }
