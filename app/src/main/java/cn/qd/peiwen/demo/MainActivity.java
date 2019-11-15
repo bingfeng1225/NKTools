@@ -7,7 +7,6 @@ import java.nio.ByteOrder;
 
 import androidx.appcompat.app.AppCompatActivity;
 import cn.qd.peiwen.pwtools.ByteUtils;
-import cn.qd.peiwen.pwtools.logger.PWLogger;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,14 +35,5 @@ public class MainActivity extends AppCompatActivity {
         buf = new byte[] {0x01, 0x10, 0x40, 0x1F, 0x32, 0x00, (byte)0xF1, 0x6F};
         byte[] crc = ByteUtils.computeCRCCode(buf,0,6);
         Log.e("测试","crc = " + ByteUtils.bytes2HexString(crc));
-
-        try {
-            int result = Integer.parseInt("ddd");
-        } catch (Exception e) {
-            PWLogger.e(e);
-            PWLogger.d(e);
-        }
-        PWLogger.d("this on create debug");
-        PWLogger.e("this on create error");
     }
 }
