@@ -8,6 +8,8 @@ import android.media.AudioManager;
 
 import java.lang.ref.WeakReference;
 
+import cn.qd.peiwen.pwtools.EmptyUtils;
+
 /**
  * Created by jeffreyliu on 16/12/8.
  */
@@ -28,10 +30,21 @@ public class VolumeManager implements AudioManager.OnAudioFocusChangeListener {
     public void init() {
         this.maxVolume = this.getMaxVolume();
         this.volume = getVolume();
+
         this.registerVolumeListener();
         this.registerAudioFocusListener();
     }
 
+    public void release() {
+        this.listener = null;
+        this.unregisterVolumeListener();
+        this.unregisterAudioFocusListener();
+    }
+
+
+    public void changeListener(IVolumeListener listener) {
+        this.listener = new WeakReference<>(listener);
+    }
 
     public boolean isMuted() {
         return (this.volume == 0);
@@ -84,9 +97,6 @@ public class VolumeManager implements AudioManager.OnAudioFocusChangeListener {
         return this.audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
     }
 
-    public void setListener(IVolumeListener listener) {
-        this.listener = new WeakReference<>(listener);
-    }
 
     private void registerVolumeListener() {
         IntentFilter filter = new IntentFilter("android.media.VOLUME_CHANGED_ACTION");
@@ -106,33 +116,27 @@ public class VolumeManager implements AudioManager.OnAudioFocusChangeListener {
     }
 
     private void fireMuteChanged() {
-        if (null != this.listener && null != this.listener.get()) {
+        if (EmptyUtils.isNotEmpty(this.listener)) {
             this.listener.get().onMuteChanged(getVolume());
         }
     }
 
     private void fireVolumeChanged() {
-        if (null != this.listener && null != this.listener.get()) {
+        if (EmptyUtils.isNotEmpty(this.listener)) {
             this.listener.get().onVolumeChanged(getVolume());
         }
     }
 
     private void fireAudioFocusLossed() {
-        if (null != this.listener && null != this.listener.get()) {
+        if (EmptyUtils.isNotEmpty(this.listener)) {
             this.listener.get().onAudioFocusLossed();
         }
     }
 
     private void fireAudioFocusGranted() {
-        if (null != this.listener && null != this.listener.get()) {
+        if (EmptyUtils.isNotEmpty(this.listener)) {
             this.listener.get().onAudioFocusGranted();
         }
-    }
-
-    public void release() {
-        this.listener = null;
-        this.unregisterVolumeListener();
-        this.unregisterAudioFocusListener();
     }
 
     @Override
