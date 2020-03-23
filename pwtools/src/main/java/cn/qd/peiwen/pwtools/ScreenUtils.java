@@ -98,7 +98,8 @@ public final class ScreenUtils {
             try {
                 widthPixels = (Integer) Display.class.getMethod("getRawWidth").invoke(d);
                 heightPixels = (Integer) Display.class.getMethod("getRawHeight").invoke(d);
-            } catch (Exception ignored) {
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
         // includes window decorations (statusbar bar/menu bar)
@@ -108,7 +109,8 @@ public final class ScreenUtils {
                 Display.class.getMethod("getRealSize", Point.class).invoke(d, realSize);
                 widthPixels = realSize.x;
                 heightPixels = realSize.y;
-            } catch (Exception ignored) {
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
         size[0] = widthPixels;
