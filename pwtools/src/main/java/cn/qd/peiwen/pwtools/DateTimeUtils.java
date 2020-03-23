@@ -358,9 +358,9 @@ public class DateTimeUtils {
      * @Description:
      */
     public static Date format(String sdate, String pattern) {
-        SimpleDateFormat sd = new SimpleDateFormat(pattern);
         Date date = null;
         try {
+            SimpleDateFormat sd = new SimpleDateFormat(pattern);
             date = sd.parse(sdate);
         } catch (ParseException e) {
             e.printStackTrace();
@@ -377,9 +377,9 @@ public class DateTimeUtils {
      * @Description:
      */
     public static String format(Date date, String pattern) {
-        SimpleDateFormat sd = new SimpleDateFormat(pattern);
         String result = null;
         try {
+            SimpleDateFormat sd = new SimpleDateFormat(pattern);
             result = sd.format(date);
         } catch (Exception e) {
             e.printStackTrace();
