@@ -21,7 +21,6 @@ public abstract class ResponseObserver<T> implements Observer<T> {
 
     @Override
     public void onError(Throwable e) {
-        e.printStackTrace();
         this.onFailure(e);
         this.onCompleted();
     }
