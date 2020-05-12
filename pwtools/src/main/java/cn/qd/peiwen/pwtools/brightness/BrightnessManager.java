@@ -30,8 +30,6 @@ public class BrightnessManager {
     public void changeListener(IBrightnessListener listener) {
         this.listener = new WeakReference<>(listener);
     }
-
-
     /**
      * 获得当前屏幕亮度值
      *

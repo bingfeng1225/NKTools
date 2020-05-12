@@ -15,10 +15,8 @@ import cn.qd.peiwen.pwtools.EmptyUtils;
  */
 
 public class VolumeManager implements AudioManager.OnAudioFocusChangeListener {
-    private int volume = 0;
     private int maxVolume = 0;
     private Context context = null;
-    private boolean isSetMute = false;
     private AudioManager audioManager = null;
     private WeakReference<IVolumeListener> listener;
 
@@ -29,8 +27,6 @@ public class VolumeManager implements AudioManager.OnAudioFocusChangeListener {
 
     public void init() {
         this.maxVolume = this.getMaxVolume();
-        this.volume = getVolume();
-
         this.registerVolumeListener();
         this.registerAudioFocusListener();
     }
@@ -46,57 +42,33 @@ public class VolumeManager implements AudioManager.OnAudioFocusChangeListener {
         this.listener = new WeakReference<>(listener);
     }
 
-    public boolean isMuted() {
-        return (this.volume == 0);
-    }
-
-    public void setMute(boolean mute) {
-        if (mute != isMuted()) {
-            isSetMute = true;
-            if (mute) {
-                this.setVolume(0);
-            } else {
-                this.setVolume(30);
-            }
-        } else {
-            fireMuteChanged();
-        }
-    }
-
-    public void setVolume(int volume) {
-        if (volume != this.volume) {
-            int temp = Math.round(volume * maxVolume / 100.f);
-            this.audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, temp, 0);
-        } else {
-            fireVolumeChanged();
-        }
-    }
-
-    public void adjustVolume(int volume) {
-        int adjust = this.volume + volume;
-        if (adjust < 0) {
-            adjust = 0;
-        }
-        if (adjust > 100) {
-            adjust = 100;
-        }
-        if (adjust != this.volume) {
-            int temp = Math.round(adjust * maxVolume / 100.f);
-            this.audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, temp, 0);
-        } else {
-            fireVolumeChanged();
-        }
-    }
-
     public int getVolume() {
-        int volume = this.audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-        return Math.round(volume * 100.f / maxVolume);
+        return this.audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
     }
 
     public int getMaxVolume() {
         return this.audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
     }
 
+    public void setVolume(int volume) {
+        if (volume < 0) {
+            volume = 0;
+        } else if (volume > maxVolume) {
+            volume = maxVolume;
+        }
+        this.audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volume, 0);
+    }
+
+    public void adjustVolume(int volume) {
+        int current = getVolume();
+        int adjust = current + volume;
+        if (adjust < 0) {
+            adjust = 0;
+        } else if (adjust > maxVolume) {
+            adjust = maxVolume;
+        }
+        this.audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, adjust, 0);
+    }
 
     private void registerVolumeListener() {
         IntentFilter filter = new IntentFilter("android.media.VOLUME_CHANGED_ACTION");
@@ -113,12 +85,6 @@ public class VolumeManager implements AudioManager.OnAudioFocusChangeListener {
 
     private void unregisterAudioFocusListener() {
         audioManager.abandonAudioFocus(this);
-    }
-
-    private void fireMuteChanged() {
-        if (EmptyUtils.isNotEmpty(this.listener)) {
-            this.listener.get().onMuteChanged(getVolume());
-        }
     }
 
     private void fireVolumeChanged() {
@@ -159,16 +125,7 @@ public class VolumeManager implements AudioManager.OnAudioFocusChangeListener {
             String action = intent.getAction();
             if ("android.media.VOLUME_CHANGED_ACTION".equals(action)) {
                 if (AudioManager.STREAM_MUSIC == intent.getIntExtra("android.media.EXTRA_VOLUME_STREAM_TYPE", AudioManager.STREAM_MUSIC)) {
-                    int temp = getVolume();
-                    if (volume != temp) {
-                        volume = temp;
-                        if (isSetMute) {
-                            isSetMute = false;
-                            fireMuteChanged();
-                        } else {
-                            fireVolumeChanged();
-                        }
-                    }
+                    fireVolumeChanged();
                 }
             }
         }
