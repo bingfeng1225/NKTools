@@ -92,7 +92,7 @@ public class BrightnessManager {
 
 
     private void registBrightnessObserver() {
-        Uri brightness = Settings.System.getUriFor(Settings.System.SCREEN_BRIGHTNESS_MODE);
+        Uri brightness = Settings.System.getUriFor(Settings.System.SCREEN_BRIGHTNESS);
         Uri brightnessModel = Settings.System.getUriFor(Settings.System.SCREEN_BRIGHTNESS_MODE);
         context.getContentResolver().registerContentObserver(brightness, false, brightnessObserver);
         context.getContentResolver().registerContentObserver(brightnessModel, false, brightnessModeObserver);
@@ -107,7 +107,6 @@ public class BrightnessManager {
         @Override
         public void onChange(boolean selfChange) {
             super.onChange(selfChange);
-            Log.e("","self ==== " + selfChange);
             if(EmptyUtils.isNotEmpty(listener)){
                 listener.get().onBrightnessChanged();
             }
