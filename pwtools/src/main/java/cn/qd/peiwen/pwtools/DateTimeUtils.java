@@ -1,12 +1,15 @@
 package cn.qd.peiwen.pwtools;
 
+import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 
 public class DateTimeUtils {
+    public static final String DEFAULT_DATE_PATTERN = "yyyy-MM-dd HH:mm:ss";
 
     public static final String[] zodiacArr = {"猴", "鸡", "狗", "猪", "鼠", "牛", "虎", "兔", "龙", "蛇", "马", "羊"};
 
@@ -357,15 +360,25 @@ public class DateTimeUtils {
      * @param @return
      * @Description:
      */
-    public static Date format(String sdate, String pattern) {
-        Date date = null;
+    public static Date format(String sdate) {
+        return format(sdate, null);
+    }
+
+    public static Date format(String sdate, TimeZone timeZone) {
+        return format(sdate, null, DEFAULT_DATE_PATTERN);
+    }
+
+    public static Date format(String sdate, TimeZone timeZone, String pattern) {
         try {
             SimpleDateFormat sd = new SimpleDateFormat(pattern);
-            date = sd.parse(sdate);
+            if (EmptyUtils.isNotEmpty(timeZone)) {
+                sd.setTimeZone(timeZone);
+            }
+            return sd.parse(sdate);
         } catch (ParseException e) {
             e.printStackTrace();
+            return null;
         }
-        return date;
     }
 
     /**
@@ -376,14 +389,32 @@ public class DateTimeUtils {
      * @param @return
      * @Description:
      */
-    public static String format(Date date, String pattern) {
-        String result = null;
+    public static String format(Date date) {
+        return format(date, null);
+    }
+
+    public static String format(Date date, TimeZone timeZone) {
+        return format(date, null, DEFAULT_DATE_PATTERN);
+    }
+
+    public static String format(Date date, TimeZone timeZone, String pattern) {
         try {
             SimpleDateFormat sd = new SimpleDateFormat(pattern);
-            result = sd.format(date);
+            if (EmptyUtils.isNotEmpty(timeZone)) {
+                sd.setTimeZone(timeZone);
+            }
+            return sd.format(date);
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
-        return result;
+    }
+
+    public static boolean isAvailablePattern(String pattern) {
+        if (EmptyUtils.isEmpty(pattern)) {
+            return false;
+        }
+        String dateTime = DateTimeUtils.format(new Date(), null, pattern);
+        return EmptyUtils.isNotEmpty(dateTime);
     }
 }
