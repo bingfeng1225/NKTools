@@ -365,7 +365,7 @@ public class DateTimeUtils {
     }
 
     public static Date format(String sdate, TimeZone timeZone) {
-        return format(sdate, null, DEFAULT_DATE_PATTERN);
+        return format(sdate, timeZone, DEFAULT_DATE_PATTERN);
     }
 
     public static Date format(String sdate, TimeZone timeZone, String pattern) {
@@ -394,7 +394,7 @@ public class DateTimeUtils {
     }
 
     public static String format(Date date, TimeZone timeZone) {
-        return format(date, null, DEFAULT_DATE_PATTERN);
+        return format(date, timeZone, DEFAULT_DATE_PATTERN);
     }
 
     public static String format(Date date, TimeZone timeZone, String pattern) {
