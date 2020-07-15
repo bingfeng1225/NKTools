@@ -9,7 +9,5 @@ public interface IVolumeListener {
 
     void onAudioFocusGranted();
 
-    void onMuteChanged(int volume);
-
     void onVolumeChanged(int volume);
 }
