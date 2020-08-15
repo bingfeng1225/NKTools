@@ -6,6 +6,9 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
 /**
  * Created by jeffreyliu on 17/1/16.
  */
@@ -57,7 +60,7 @@ public class AppUtils {
     /**
      * 获取单个App图标
      **/
-    public static Drawable getAppIcon(Context context,  String packageName) {
+    public static Drawable getAppIcon(Context context, String packageName) {
         PackageManager packageManager = getPackageManager(context);
         Drawable icon = null;
         try {
@@ -76,7 +79,7 @@ public class AppUtils {
         if (null == packageName) {
             packageName = getPackageName(context);
         }
-        ApplicationInfo applicationInfo = getApplicationInfo(context,packageName);
+        ApplicationInfo applicationInfo = getApplicationInfo(context, packageName);
         if (null != applicationInfo) {
             String appName = packageManager.getApplicationLabel(applicationInfo).toString();
             return appName;
@@ -89,7 +92,7 @@ public class AppUtils {
      * 获取单个App版本号Name
      **/
     public static String getAppVersionName(Context context, String packageName) {
-        PackageInfo packageInfo = getPackageInfo(context,packageName);
+        PackageInfo packageInfo = getPackageInfo(context, packageName);
         if (null != packageInfo) {
             return packageInfo.versionName;
         } else {
@@ -100,12 +103,59 @@ public class AppUtils {
     /**
      * 获取单个App版本号Code
      **/
-    public static int getAppVersionCode(Context context,String packageName) {
-        PackageInfo packageInfo = getPackageInfo(context,packageName);
+    public static int getAppVersionCode(Context context, String packageName) {
+        PackageInfo packageInfo = getPackageInfo(context, packageName);
         if (null != packageInfo) {
             return packageInfo.versionCode;
         } else {
             return -1;
         }
+    }
+
+    /**
+     * 应用静默安装
+     **/
+    public static String[] silentInstall(String apkPath) {
+        Process process = null;
+        BufferedReader errorResult = null;
+        BufferedReader successResult = null;
+        StringBuilder errorMsg = new StringBuilder();
+        StringBuilder successMsg = new StringBuilder();
+        try {
+            process = new ProcessBuilder("pm", "install", "-r", apkPath).start();
+            errorResult = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+            successResult = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String s;
+            while ((s = errorResult.readLine()) != null) {
+                errorMsg.append(s);
+            }
+            while ((s = successResult.readLine()) != null) {
+                successMsg.append(s);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (successResult != null) {
+                    successResult.close();
+                }
+            } catch (Exception e) {
+
+            }
+            try {
+                if (errorResult != null) {
+                    errorResult.close();
+                }
+            } catch (Exception e) {
+
+            }
+            if (process != null) {
+                process.destroy();
+            }
+        }
+        return new String[]{
+                errorMsg.toString(),
+                successResult.toString()
+        };
     }
 }
