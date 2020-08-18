@@ -1,17 +1,18 @@
 package cn.qd.peiwen.pwtools;
 
-import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Base64;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.math.BigInteger;
+import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
 import java.text.DecimalFormat;
 
@@ -281,6 +282,41 @@ public class FileUtils {
         return null;
     }
 
+    private static boolean copyFile(String sourcePath, String destPath) {
+        return copyFile(new File(sourcePath), new File(destPath));
+    }
+
+    private static boolean copyFile(File source, File dest) {
+        FileChannel inputChannel = null;
+        FileChannel outputChannel = null;
+        try {
+            inputChannel = new FileInputStream(source).getChannel();
+            outputChannel = new FileOutputStream(dest).getChannel();
+            outputChannel.transferFrom(inputChannel, 0, inputChannel.size());
+            inputChannel.close();
+            outputChannel.close();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                if (null != inputChannel) {
+                    inputChannel.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+                if (null != outputChannel) {
+                    outputChannel.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     public static String file2Base64(String filepath, long from, long length) {
         return file2Base64(new File(filepath), from, length);
