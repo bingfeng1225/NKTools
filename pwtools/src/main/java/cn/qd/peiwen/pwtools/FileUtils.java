@@ -282,11 +282,11 @@ public class FileUtils {
         return null;
     }
 
-    private static boolean copyFile(String sourcePath, String destPath) {
+    public static boolean copyFile(String sourcePath, String destPath) {
         return copyFile(new File(sourcePath), new File(destPath));
     }
 
-    private static boolean copyFile(File source, File dest) {
+    public static boolean copyFile(File source, File dest) {
         FileChannel inputChannel = null;
         FileChannel outputChannel = null;
         try {
