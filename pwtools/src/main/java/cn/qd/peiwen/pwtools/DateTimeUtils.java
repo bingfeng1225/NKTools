@@ -137,6 +137,32 @@ public class DateTimeUtils {
 
 
     /***
+     *获取与一个日期相差几个小时的时间
+     *
+     * @param date      参照日期
+     * @param offset    偏移日期
+     * @return 对应天的开始日期
+     */
+    public static Date datetimeOfHourByDate(Date date, int offset) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.HOUR_OF_DAY, offset);
+        return cal.getTime();
+    }
+    /***
+     *获取于一个日期相差几天的时间
+     *
+     * @param date      参照日期
+     * @param offset    偏移日期
+     * @return 对应天的开始日期
+     */
+    public static Date datetimeOfDayByDate(Date date, int offset) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.DATE, offset);
+        return cal.getTime();
+    }
+    /***
      *获取于一个日期相差几天的某天的开始时间
      *
      * @param date      参照日期
