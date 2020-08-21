@@ -35,8 +35,8 @@ public class PreferencesManager {
         this.editor.remove(key).commit();
     }
 
-    public void contains(String key) {
-        this.preferences.contains(key);
+    public boolean contains(String key) {
+        return this.preferences.contains(key);
     }
 
     public void putInt(String key, int value) {
