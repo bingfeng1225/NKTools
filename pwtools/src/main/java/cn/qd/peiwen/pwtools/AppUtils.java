@@ -155,7 +155,7 @@ public class AppUtils {
         }
         return new String[]{
                 errorMsg.toString(),
-                successResult.toString()
+                successMsg.toString()
         };
     }
 }
