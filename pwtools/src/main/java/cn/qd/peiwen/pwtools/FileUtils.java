@@ -289,12 +289,16 @@ public class FileUtils {
     public static boolean copyFile(File source, File dest) {
         FileChannel inputChannel = null;
         FileChannel outputChannel = null;
+        FileInputStream inputStream = null;
+        FileOutputStream outputStream = null;
         try {
-            inputChannel = new FileInputStream(source).getChannel();
-            outputChannel = new FileOutputStream(dest).getChannel();
+            inputStream = new FileInputStream(source);
+            outputStream = new FileOutputStream(dest);
+            inputChannel = inputStream.getChannel();
+            outputChannel = outputStream.getChannel();
             outputChannel.transferFrom(inputChannel, 0, inputChannel.size());
-            inputChannel.close();
-            outputChannel.close();
+            outputStream.getFD().sync();
+            outputStream.flush();
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -311,6 +315,22 @@ public class FileUtils {
             try {
                 if (null != outputChannel) {
                     outputChannel.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+                if (null != inputStream) {
+                    inputStream.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+                if (null != outputStream) {
+                    outputStream.close();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
