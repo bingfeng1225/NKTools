@@ -288,85 +288,6 @@ public class ByteUtils {
         return (byte) (~xor);
     }
 
-
-    public static byte[] computeCRC16Code(byte[] data) {
-        if (EmptyUtils.isEmpty(data)) {
-            throw new IllegalArgumentException("The data can not be blank");
-        }
-        return computeCRC16Code(data, 0, data.length);
-    }
-
-    public static byte[] computeCRC16Code(byte[] data, int offset, int len) {
-        if (EmptyUtils.isEmpty(data)) {
-            throw new IllegalArgumentException("The data can not be blank");
-        }
-        if (offset < 0 || offset > data.length - 1) {
-            throw new IllegalArgumentException("The offset index out of bounds");
-        }
-        if (len < 0 || offset + len > data.length) {
-            throw new IllegalArgumentException("The len can not be < 0 or (offset + len) index out of bounds");
-        }
-        int crc = 0xFFFF;
-        for (int pos = offset; pos < offset + len; pos++) {
-            if (data[pos] < 0) {
-                crc ^= (int) data[pos] + 256; // XOR byte into least sig. byte of
-                // crc
-            } else {
-                crc ^= (int) data[pos]; // XOR byte into least sig. byte of crc
-            }
-            for (int i = 8; i != 0; i--) { // Loop over each bit
-                if ((crc & 0x0001) != 0) { // If the LSB is set
-                    crc >>= 1; // Shift right and XOR 0xA001
-                    crc ^= 0xA001;
-                } else {
-                    // Else LSB is not set
-                    crc >>= 1; // Just shift right
-                }
-            }
-        }
-        return short2Bytes((short)crc);
-    }
-
-
-    public static byte[] computeCRC16CodeLE(byte[] data) {
-        if (EmptyUtils.isEmpty(data)) {
-            throw new IllegalArgumentException("The data can not be blank");
-        }
-        return computeCRC16CodeLE(data, 0, data.length);
-    }
-
-    public static byte[] computeCRC16CodeLE(byte[] data, int offset, int len) {
-        if (EmptyUtils.isEmpty(data)) {
-            throw new IllegalArgumentException("The data can not be blank");
-        }
-        if (offset < 0 || offset > data.length - 1) {
-            throw new IllegalArgumentException("The offset index out of bounds");
-        }
-        if (len < 0 || offset + len > data.length) {
-            throw new IllegalArgumentException("The len can not be < 0 or (offset + len) index out of bounds");
-        }
-        int crc = 0xFFFF;
-        for (int pos = offset; pos < offset + len; pos++) {
-            if (data[pos] < 0) {
-                crc ^= (int) data[pos] + 256; // XOR byte into least sig. byte of
-                // crc
-            } else {
-                crc ^= (int) data[pos]; // XOR byte into least sig. byte of crc
-            }
-            for (int i = 8; i != 0; i--) { // Loop over each bit
-                if ((crc & 0x0001) != 0) { // If the LSB is set
-                    crc >>= 1; // Shift right and XOR 0xA001
-                    crc ^= 0xA001;
-                } else {
-                    // Else LSB is not set
-                    crc >>= 1; // Just shift right
-                }
-            }
-        }
-        return short2BytesLE((short)crc);
-    }
-
-
     public static byte computeL8SumCode(byte[] data) {
         if (EmptyUtils.isEmpty(data)) {
             throw new IllegalArgumentException("The data can not be blank");
@@ -388,6 +309,126 @@ public class ByteUtils {
         for (int pos = offset; pos < offset + len; pos++) {
             sum += data[pos];
         }
-        return (byte)sum;
+        return (byte) sum;
     }
+
+    public static byte[] computeCRC16Code(byte[] data) {
+        if (EmptyUtils.isEmpty(data)) {
+            throw new IllegalArgumentException("The data can not be blank");
+        }
+        return computeCRC16Code(data, 0xA001);
+    }
+
+    public static byte[] computeCRC16Code(byte[] data, int seed) {
+        if (EmptyUtils.isEmpty(data)) {
+            throw new IllegalArgumentException("The data can not be blank");
+        }
+        return computeCRC16Code(data, seed, 0, data.length);
+    }
+
+    public static byte[] computeCRC16Code(byte[] data, int offset, int len) {
+        if (EmptyUtils.isEmpty(data)) {
+            throw new IllegalArgumentException("The data can not be blank");
+        }
+        if (offset < 0 || offset > data.length - 1) {
+            throw new IllegalArgumentException("The offset index out of bounds");
+        }
+        if (len < 0 || offset + len > data.length) {
+            throw new IllegalArgumentException("The len can not be < 0 or (offset + len) index out of bounds");
+        }
+        return computeCRC16Code(data, 0xA001, 0, data.length);
+    }
+
+
+    public static byte[] computeCRC16Code(byte[] data, int seed, int offset, int len) {
+        if (EmptyUtils.isEmpty(data)) {
+            throw new IllegalArgumentException("The data can not be blank");
+        }
+        if (offset < 0 || offset > data.length - 1) {
+            throw new IllegalArgumentException("The offset index out of bounds");
+        }
+        if (len < 0 || offset + len > data.length) {
+            throw new IllegalArgumentException("The len can not be < 0 or (offset + len) index out of bounds");
+        }
+        int crc = 0xFFFF;
+        for (int pos = offset; pos < offset + len; pos++) {
+            if (data[pos] < 0) {
+                crc ^= (int) data[pos] + 256; // XOR byte into least sig. byte of
+                // crc
+            } else {
+                crc ^= (int) data[pos]; // XOR byte into least sig. byte of crc
+            }
+            for (int i = 8; i != 0; i--) { // Loop over each bit
+                if ((crc & 0x0001) != 0) { // If the LSB is set
+                    crc >>= 1; // Shift right and XOR 0xA001
+                    crc ^= seed;
+                } else {
+                    // Else LSB is not set
+                    crc >>= 1; // Just shift right
+                }
+            }
+        }
+        return short2Bytes((short) crc);
+    }
+
+
+    public static byte[] computeCRC16CodeLE(byte[] data) {
+        if (EmptyUtils.isEmpty(data)) {
+            throw new IllegalArgumentException("The data can not be blank");
+        }
+        return computeCRC16CodeLE(data, 0xA001);
+    }
+
+    public static byte[] computeCRC16CodeLE(byte[] data, int seed) {
+        if (EmptyUtils.isEmpty(data)) {
+            throw new IllegalArgumentException("The data can not be blank");
+        }
+        return computeCRC16CodeLE(data, seed, 0, data.length);
+    }
+
+    public static byte[] computeCRC16CodeLE(byte[] data, int offset, int len) {
+        if (EmptyUtils.isEmpty(data)) {
+            throw new IllegalArgumentException("The data can not be blank");
+        }
+        if (offset < 0 || offset > data.length - 1) {
+            throw new IllegalArgumentException("The offset index out of bounds");
+        }
+        if (len < 0 || offset + len > data.length) {
+            throw new IllegalArgumentException("The len can not be < 0 or (offset + len) index out of bounds");
+        }
+        return computeCRC16CodeLE(data, 0xA001, 0, data.length);
+    }
+
+    public static byte[] computeCRC16CodeLE(byte[] data, int seed, int offset, int len) {
+        if (EmptyUtils.isEmpty(data)) {
+            throw new IllegalArgumentException("The data can not be blank");
+        }
+        if (offset < 0 || offset > data.length - 1) {
+            throw new IllegalArgumentException("The offset index out of bounds");
+        }
+        if (len < 0 || offset + len > data.length) {
+            throw new IllegalArgumentException("The len can not be < 0 or (offset + len) index out of bounds");
+        }
+        int crc = 0xFFFF;
+        for (int pos = offset; pos < offset + len; pos++) {
+            if (data[pos] < 0) {
+                crc ^= (int) data[pos] + 256; // XOR byte into least sig. byte of
+                // crc
+            } else {
+                crc ^= (int) data[pos]; // XOR byte into least sig. byte of crc
+            }
+            for (int i = 8; i != 0; i--) { // Loop over each bit
+                if ((crc & 0x0001) != 0) { // If the LSB is set
+                    crc >>= 1; // Shift right and XOR 0xA001
+                    crc ^= seed;
+                } else {
+                    // Else LSB is not set
+                    crc >>= 1; // Just shift right
+                }
+            }
+        }
+        return short2BytesLE((short) crc);
+    }
+
+
 }
