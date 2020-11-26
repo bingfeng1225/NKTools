@@ -36,8 +36,15 @@ public class KeyboardUtils {
      * @param view t输入框
      */
     public static void hideSoftInput(View view) {
+        hideSoftInput(view, false);
+    }
+
+    public static void hideSoftInput(View view, boolean clearFocus) {
         if (EmptyUtils.isEmpty(view)) {
             return;
+        }
+        if (clearFocus) {
+            view.clearFocus();
         }
         if (!isSoftInputShow(view.getContext())) {
             return;
