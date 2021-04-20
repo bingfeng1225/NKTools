@@ -46,9 +46,6 @@ public class KeyboardUtils {
         if (clearFocus) {
             view.clearFocus();
         }
-        if (!isSoftInputShow(view.getContext())) {
-            return;
-        }
         InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
